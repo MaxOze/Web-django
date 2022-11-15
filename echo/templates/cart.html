@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'cart.css' %}">
+    <title>Корзина</title>
+</head>
+<body>
+    <h1><a class="btn" href="{% url 'shop' %}">Назад</a></h1>
+    {% for book in books %}
+        <div>
+            <h2>{{ book.name }}</h2>
+            <p> {{ book.author }} | {{ book.price }} </p>
+        </div>
+    {% endfor %}
+    </div>
+    <h1>ПОЛНАЯ ЦЕНА ЗАКАЗА = {{ fullprice }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input class="btn" type="submit" value="Сделать заказ"/>
+    </form>
+    <h1>{{date}}</h1>
+</body>
+</html>

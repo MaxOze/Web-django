@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'orders.css' %}">
+    <title>Заказы</title>
+</head>
+<body>
+    <div>
+        <h1><a class="btn" href="{% url 'shop' %}">Назад в меню</a></h1>
+    </div>
+    {% for key, value in orders.items %}
+    <div>
+        <table>
+            <caption>{{ key }}</caption>
+            {% for book in  value  %}
+            <tr>
+                <td>{{ book.name }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.price }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endfor %}
+</body>
+</html>

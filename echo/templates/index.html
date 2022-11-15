@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <title>Главная</title>
+</head>
+<body>
+    <h2>Список книг {{ name }}</h2>
+    <div>
+        <h2>
+        {% if role == 'none' %}
+            <p><a href="{% url 'signin' %}"> Зарегистрируйтесь чтобы добавить книгу</a></p>
+        {% else %}
+            <p><a href="{% url 'create' %}">Добавить книгу </a></p>
+            <p><a href="{% url 'profile' %}"> Профиль </a></p>
+            <p><a href="{% url 'logout' %}"> Выйти </a></p>
+        {% endif %}
+        <p><a href="{% url 'cart' %}"> Корзина </a></p>
+        <p><a href="{% url 'orders' %}"> Заказы</a></p>
+        </h2>
+    </div>
+    <div>
+        {% csrf_token %}
+        <table class="table_price" id="table">
+            <caption>Книги</caption>
+            {% if role == 'admin' %}
+                <thead><th id="name">Название</th><th id="author">Автор</th><th id="price">Цена</th><th></th><th></th></thead>
+            {% else %}
+                <thead><th id="name">Название</th><th id="author">Автор</th><th id="price">Цена</th><th></th></thead>
+            {% endif %}
+            <tbody>
+            {% for book in page_obj %}
+                <tr>
+                    <td>{{ book.name }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.price }}</td>
+                    {% if role == 'admin' %}
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'edit' book.id %}" class="btn">Изменить</a>
+                                <a href="{% url 'delete' book.id %}" class="btn">Удалить</a>
+                            </div>
+                        </td>
+                    {% endif %}
+                    <td><a class="btn" href="{% url 'tocart' book.id %}?page={{ page_number }}">Добавить в корзину</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        <table>
+            <tr>
+                {% if page_obj.has_previous %}
+                    <td class="page-item"><a class="page-tdnk" href="?page=1">|Первая страница|</a></td>
+                    <td class="page-item"><a class="page-tdnk" href="?page={{ page_obj.previous_page_number }}">|Предыдущая страница|</a></td>
+                {% else %}
+                    <td class="page-item disabled"><a class="page-tdnk">|Первая страница|</a></td>
+                    <td class="page-item disabled"><a class="page-tdnk">|Предыдущая страница|</a></td>
+                {% endif %}
+                    <td class="page-item"><h3 id="page">{{ page_number }}</h3></td>
+                {% if page_obj.has_next %}
+                    <td class="page-item"><a class="page-tdnk" href="?page={{ page_obj.next_page_number }}">|Следующая страница|</a></td>
+                    <td class="page-item"><a class="page-tdnk" href="?page={{ page_obj.paginator.num_pages }}">|Последняя страница|</a></td>
+                {% else %}
+                    <td class="page-item disabled"><a class="page-tdnk">|Следующая страница|</a></td>
+                    <td class="page-item disabled"><a class="page-tdnk">|Последняя страница|</a></td>
+                {% endif %}
+            </tr>
+        </table>
+</body>
+<script type="text/javascript" src="{% static 'sort.js' %}"></script>
+</html>
